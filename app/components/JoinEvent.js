@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Button, StyleSheet, Alert, TextInput, ScrollView } from 'react-native';
+import { View, Text, Button, StyleSheet, Alert, TextInput, ActivityIndicator, ScrollView } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 
 
@@ -9,7 +9,30 @@ export default class JoinEvent extends Component {
         super()
         this.state = {
             checkBoxChecked: [],
-            text: ''
+            text: '',
+            event: null,
+            newTeamId: null,
+            user: {
+                id: "id1",
+                email: "userapp@app.com",
+                firstName: "user",
+                lastName: "app"
+            }
+        }
+    }
+
+    // fetch event data from server
+    async makeRemoteRequest(eventId) {
+        try {
+            let response = await fetch(
+                `http://104.196.227.120/api/event/${eventId}`,
+            );
+            let responseJson = await response.json();
+            this.setState({
+                event: responseJson
+            })
+        } catch (error) {
+            console.error(error);
         }
     }
 
@@ -28,8 +51,35 @@ export default class JoinEvent extends Component {
         })
     }
 
-    onJoinTeam() {
-        console.log(this.state.checkBoxChecked.id)
+
+    onJoinTeam(teamId) {
+        var tId = null
+        if (teamId == null || teamId == undefined)
+            tId = this.state.newTeamId;
+        else
+            tId = teamId;
+        const user = this.state.user
+        console.log(user)
+        console.log(this.state.event.owner)
+        const url = `http://104.196.227.120/api/event/team/member/${this.state.event.id}/${tId}`;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user)
+        })
+            .then((response) => response.json())
+            .then((responseData) => {
+                console.log(responseData)
+                this.props.navigation.navigate('EventsList');
+                Alert.alert("Congratulations! You have created new team and become it's first member!")
+            })
+            .catch((error) => {
+                console.error(error);
+            })
     }
 
     onCreateTeam = async (eventId) => {
@@ -38,7 +88,6 @@ export default class JoinEvent extends Component {
         }
         // let name = this.state.text;
         const url = `http://104.196.227.120/api/event/team/${eventId}/`;
-        console.log(newTeam);
 
         fetch(url, {
             method: 'POST',
@@ -50,16 +99,32 @@ export default class JoinEvent extends Component {
         })
             .then((response) => response.json())
             .then((responseData) => {
-                console.log(responseData);
+                this.setState({
+                    newTeamId: responseData.id
+                })
+                this.makeRemoteRequest(eventId)
+                this.onJoinTeam();
             })
             .catch((error) => {
                 console.error(error);
             })
-
-
-        this.props.navigation.navigate('EventsList');
-        Alert.alert("Congratulations! You have created new team and become it's first member!")
     }
+
+    // renders "loading" animated image
+    renderFooter = () => {
+        if (this.state.loading == false)
+            return null;
+        return (
+            <View
+                style={{
+                    paddingVertical: 20,
+                    borderTopWidth: 1,
+                    borderColor: "#CED0CE"
+                }}>
+                <ActivityIndicator animating size="large" />
+            </View>
+        );
+    };
 
     renderCheckboxes(params) {
         return params.teams.map((team) => {
@@ -79,35 +144,45 @@ export default class JoinEvent extends Component {
 
     render() {
         const { params } = this.props.navigation.state;
-        return (
-            <View style={styles.container}>
-                <View style={styles.container2}>
-                    <Text style={styles.text}>Pick team you wish to join</Text>
-                    {this.renderCheckboxes(params)}
-                    <View style={styles.buttonContainer}>
-                        <Button
-                            color="green"
-                            title='SUBMIT'
-                            onPress={() => this.onJoinTeam()} />
-                    </View>
+        if (this.state.event == null || this.state.event == undefined) {
+            this.makeRemoteRequest(params.id)
+            return (
+                <View>
+                    {this.renderFooter()}
                 </View>
-                <View style={styles.container2}>
-                    <Text style={styles.text}>If you would like to create new team just give us a team name!</Text>
-                    <TextInput
-                        style={styles.teamName}
-                        placeholder="Type you team name here!"
-                        onChangeText={(text) => this.setState({ text })}
-                        value={this.state.text} />
-                    <View style={styles.buttonContainer}>
-                        <Button
-                            color="green"
-                            title='SUBMIT'
-                            onPress={() => this.onCreateTeam(params.id)}
-                        />
+            )
+        }
+        else {
+            return (
+                <ScrollView style={styles.container}>
+                    {/* <View style={styles.container2}>
+                        <Text style={styles.text}>Pick team you wish to join</Text>
+                        {this.renderCheckboxes(params)}
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                color="green"
+                                title='SUBMIT'
+                                onPress={() => this.onJoinTeam()} />
+                        </View>
+                    </View> */}
+                    <View style={styles.container2}>
+                        <Text style={styles.text}>If you would like to create new team just give us a team name!</Text>
+                        <TextInput
+                            style={styles.teamName}
+                            placeholder="Type you team name here!"
+                            onChangeText={(text) => this.setState({ text })}
+                            value={this.state.text} />
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                color="green"
+                                title='SUBMIT'
+                                onPress={() => this.onCreateTeam(params.id)}
+                            />
+                        </View>
                     </View>
-                </View>
-            </View>
-        );
+                </ScrollView>
+            );
+        }
     }
 }
 
@@ -134,5 +209,6 @@ const styles = StyleSheet.create({
     buttonContainer: {
         marginTop: 25,
         marginHorizontal: 50,
+        marginBottom: 20,
     },
 })
