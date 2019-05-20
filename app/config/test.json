@@ -1,0 +1,132 @@
+{
+    "events": [
+        {
+            "id": "1",
+            "name": "Le Event 1",
+            "description": "This is just an event",
+            "checkpointCount": 2,
+            "checkpoints": [
+                {
+                    "id": "1",
+                    "latitude": 10,
+                    "longitude": 10,
+                    "name": "First"
+                },
+                {
+                    "id": "2",
+                    "latitude": 20,
+                    "longitude": 20,
+                    "name": "Second"
+                }
+            ],
+            "teamSize": 2,
+            "teams": [
+                {
+                    "id": "team1",
+                    "name": "Team One",
+                    "members": [
+                        {
+                            "id": "id1",
+                            "email": "le_email@email.com",
+                            "firstName": "QWERTY",
+                            "lastName": "ASDFGH"
+                        },
+                        {
+                            "id": "id2",
+                            "email": "karpis@gmail.com",
+                            "firstName": "Karpis",
+                            "lastName": "Karsis"
+                        }
+                    ],
+                    "checkedCheckpoints": [
+                        "1"
+                    ]
+                },
+                {
+                    "id": "team2",
+                    "name": "Team Two",
+                    "members": [
+                        {
+                            "id": "id3",
+                            "email": "stotele@inbox.lt",
+                            "firstName": "Stoteles",
+                            "lastName": "Darbininke"
+                        },
+                        {
+                            "id": "id4",
+                            "email": "bulka@ktu.edu",
+                            "firstName": "Flex",
+                            "lastName": "Tape"
+                        }
+                    ],
+                    "checkedCheckpoints": [
+                        "1"
+                    ]
+                },
+                {
+                    "id": "1558029932469",
+                    "name": "Nauja komanda",
+                    "members": [],
+                    "checkedCheckpoints": []
+                },
+                {
+                    "id": "1558030219429",
+                    "name": "Visomis",
+                    "members": [],
+                    "checkedCheckpoints": []
+                },
+                {
+                    "id": "1558045405495",
+                    "name": "Now It Works",
+                    "members": [],
+                    "checkedCheckpoints": []
+                },
+                {
+                    "id": "1558111059411",
+                    "name": "Naujoji",
+                    "members": [
+                        {
+                            "id": "1558029911793",
+                            "email": "justaskarpis@gmail.com",
+                            "firstName": "Justas",
+                            "lastName": "Geras"
+                        }
+                    ],
+                    "checkedCheckpoints": []
+                }
+            ],
+            "created": "2019-05-16T18:04:37.343+0000",
+            "starting": "2019-05-16T18:04:37.343+0000",
+            "status": "Open",
+            "estimatedTimeMillis": 7200000,
+            "estimatedDistanceMetres": 2500,
+            "photos": [
+                {
+                    "eventId": "1",
+                    "teamId": "team1",
+                    "checkpointId": "1",
+                    "downloadURL": "http://blahblah.com/alksjdlkad.jpg",
+                    "fileType": "image/png",
+                    "fileSize": 100
+                },
+                {
+                    "eventId": "1",
+                    "teamId": "team2",
+                    "checkpointId": "1",
+                    "downloadURL": "http://jadsahdsc.net/aljsdcjadc.png",
+                    "fileType": "image/png",
+                    "fileSize": 100
+                }
+            ],
+            "owner": {
+                "id": "id1",
+                "email": "le_email@email.com",
+                "firstName": "QWERTY",
+                "lastName": "ASDFGH"
+            }
+        }
+    ],
+    "totalElements": 16,
+    "pageSize": 1,
+    "totalPages": 16
+}
