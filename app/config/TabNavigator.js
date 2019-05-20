@@ -4,7 +4,6 @@ import { Icon } from 'react-native-elements';
 
 import EventsList from '../components/EventsList';
 import EventMap from '../components/EventMap';
-import MarkerCamera from '../components/MarkerCamera';
 import EventDetails from '../components/EventDetails';
 
 const TabNavigator = createBottomTabNavigator({
