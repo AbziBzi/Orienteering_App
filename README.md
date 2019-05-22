@@ -17,5 +17,5 @@ This app was made using back-end from [this](https://github.com/Giedrius-Kristin
 
 - There is no Google Maps KEY in this repo.
 - If you are running on Linux or MacOs you may need `local.properties` in your app `android/` folder. 
-- Servers we used to this project may not be working when you are cloning this repo.
+- Servers we used for this project may not be working when you are cloning this repo.
 - Link to back-end and front-end web repo is at the begining of this file.
