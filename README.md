@@ -1,4 +1,4 @@
-# Orienteering_App
+# SemestroProjektas
 Orienteering application
 
 This part of project was made by:
@@ -9,7 +9,7 @@ This app was made using back-end from [this](https://github.com/Giedrius-Kristin
 
 ## Getting Started
 
-- Clone Repo: `git clone https://github.com/AbziBzi/Orienteering_App.git`
+- Clone Repo: `https://github.com/AbziBzi/SemestroProjektas.git`
 - From the `React-Native` directory run `npm install`
 
 
