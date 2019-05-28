@@ -26,8 +26,8 @@ export default class EventMap extends Component {
       position => {
         this.setState({ location: position });
       },
-      error => Alert.alert(error.message),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      error => { },
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
     );
   };
 
@@ -49,42 +49,53 @@ export default class EventMap extends Component {
 
   // Checking distance between marker and user
   // If user is too far, he will not able to check checkpoint
-  getDistance(marker, user) {
-    delta = 0.02;
-    markerLat = marker.latitude;
-    markerLon = marker.longitude;
-    userLat = user.coords.latitude;
-    userLon = user.coords.longitude;
+  getDistance(marker, location) {
+    for (let count = 0; count < 10 && location == null; count++) {
+      this.findCoordinates();
+    }
+    if (location == null)
+      Alert.alert("Location not found!")
+    else {
+      delta = 0.02;
+      markerLat = marker.latitude;
+      markerLon = marker.longitude;
+      userLat = location.coords.latitude;
+      userLon = location.coords.longitude;
 
-    var lat = Math.abs(markerLat - userLat);
-    var lon = Math.abs(markerLon - userLon);
+      var lat = Math.abs(markerLat - userLat);
+      var lon = Math.abs(markerLon - userLon);
 
-    if (lat < delta && lon < delta)
-      return true
-    return false
+      if (lat < delta && lon < delta)
+        return true
+      return false
+    }
+    return null
   }
 
   // Image-Picker that leting use default phone camera to make photo
   handleChoosePhoto = (params, marker) => {
     this.findCoordinates();
     bool = this.getDistance(marker, this.state.location)
+    console.log(bool)
     const options = {
       quality: 0.5,
       noData: true,
     };
-    if (bool) {
+    if (bool && !this.state.event.teams[0].checkedCheckpoints.includes(marker.id)) {
       ImagePicker.launchCamera(options, response => {
         if (response.uri) {
           this.setState({
-            photo: response
+            photo: response,
           },
             () => this.sendPicture(params, marker));
         }
       });
     }
-    else{
+    else if (bool === false) {
       Alert.alert("You are too far away!")
     }
+    else if (this.state.event.teams[0].checkedCheckpoints.includes(marker.id))
+      Alert.alert("You have checkd this marker!")
   };
 
   // Sending picture to server
@@ -108,7 +119,11 @@ export default class EventMap extends Component {
       body: file
     }).then((response) => response.json())
       .then((responseData) => {
-        Alert.alert("You have succesfull checked " + marker.id + " checkpoint");
+        if (this.state.event.teams[0].checkedCheckpoints.length +1 == this.state.event.checkpointCount) {
+          Alert.alert("Congratulations! Your team have checked all points!")
+        }
+        else
+          Alert.alert("You have succesfull checked " + marker.id + " checkpoint");
         this.makeRemoteRequest(params.id)
       })
       .catch((error) => {

@@ -25,9 +25,16 @@ export default class EventDetails extends Component {
         return check
     }
 
+    renderButton(status){
+        if(status == "Open"){
+        return(
+            <Button color="green" title="Join Event" onPress={() => this.onJoinEvent()} />
+        );
+        }
+        return null;
+    }
 
     render() {
-        // const { params } = this.props.navigation.state;
         const { status, description, checkpointCount, teamSize, created,
             starting, estimatedTimeMillis, estimatedDistanceMetres, checkpoints } = this.props.navigation.state.params;
         check = this.setCheckpoints(status, checkpoints);
@@ -88,7 +95,7 @@ export default class EventDetails extends Component {
                     </View>
                 </View>
                 <View style={styles.buttonContainer}>
-                    <Button color="green" title="Join Event" onPress={() => this.onJoinEvent()} />
+                    {this.renderButton(status)}
                 </View>
             </View>
         )

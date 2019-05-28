@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, FlatList, ActivityIndicator } from "react-native";
+import { View, FlatList, ActivityIndicator, Alert } from "react-native";
 import { ListItem } from "react-native-elements";
 
 export default class EventsList extends Component {
@@ -88,8 +88,12 @@ export default class EventsList extends Component {
   // If event status is Open or Closed method navigate to EventDetails screen
   // otherwise - when status is InProgress it navigate to EventMap
   onNavigate = (item) => {
+    console.log(item.teams);
     if (item.status == "Open" || item.status == "Closed") {
       this.props.navigation.navigate('EventDetails', { ...item });
+    }
+    else if (item.teams == undefined || item.teams == null || item.teams.length == 0) {
+      Alert.alert("You are not in any team!");
     }
     else
       this.props.navigation.navigate('EventMap', { ...item });
